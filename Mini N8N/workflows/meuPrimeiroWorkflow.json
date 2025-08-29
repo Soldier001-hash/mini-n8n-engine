@@ -1,0 +1,41 @@
+{
+  "nodes": [
+    {
+      "id": "start",
+      "type": "StartNode",
+      "params": { "user": { "name": "Guilherme", "id": 123 } }
+    },
+    {
+      "id": "logWelcome",
+      "type": "LogMessageNode",
+      "params": { "message": "Bem-vindo, {{user.name}} (ID: {{user.id}})" }
+    },
+    {
+      "id": "fetchUserPost",
+      "type": "FetchApiNode",
+      "params": { "url": "https://jsonplaceholder.typicode.com/posts/1" }
+    },
+    {
+      "id": "logPostTitle",
+      "type": "LogMessageNode",
+      "params": { "message": "Título do Post: {{api_result.title}}" }
+    },
+    {
+      "id": "fetchComments",
+      "type": "FetchApiNode",
+      "params": { "url": "https://jsonplaceholder.typicode.com/comments/1" }
+    },
+    {
+      "id": "logCommentEmail",
+      "type": "LogMessageNode",
+      "params": { "message": "Email do Comentário: {{api_result.email}}" }
+    }
+  ],
+  "connections": [
+    { "from": "start", "to": "logWelcome" },
+    { "from": "logWelcome", "to": "fetchUserPost" },
+    { "from": "logWelcome", "to": "fetchComments" },
+    { "from": "fetchUserPost", "to": "logPostTitle" },
+    { "from": "fetchComments", "to": "logCommentEmail" }
+  ]
+}

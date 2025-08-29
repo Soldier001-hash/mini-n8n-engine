@@ -1,0 +1,11 @@
+// Path: /mini-n8n/tsconfig.json (VERSÃO MODIFICADA)
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": false,
+    "esModuleInterop": true
+  }
+}

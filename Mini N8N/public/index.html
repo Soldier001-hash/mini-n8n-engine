@@ -1,0 +1,74 @@
+<!-- Caminho: /mini-n8n/public/index.html -->
+
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Mini-n8n</title>
+    <style>
+        /* CSS para tornar um pouco mais apelativo */
+        body { font-family: sans-serif; background-color: #f0f2f5; color: #333; margin: 0; padding: 20px; }
+        #app { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #1a1a1a; }
+        button { background-color: #6c5ce7; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #5848d1; }
+        #nodes-container { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        .node { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; background-color: #fafafa; }
+        .node-id { font-weight: bold; color: #6c5ce7; }
+        .node-type { font-family: monospace; background: #eee; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <h1>Interface do Mini-n8n</h1>
+        <p>Clique no botão para carregar a estrutura do workflow do nosso backend.</p>
+        <button id="load-workflow-btn">Carregar Workflow</button>
+        <div id="nodes-container">
+            <!-- Os nós do workflow aparecerão aqui -->
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para comunicar com o nosso Backend
+
+        const loadButton = document.getElementById('load-workflow-btn');
+        const nodesContainer = document.getElementById('nodes-container');
+
+        loadButton.addEventListener('click', async () => {
+            console.log('Botão clicado! A obter dados do workflow...');
+            nodesContainer.innerHTML = '<p>A carregar...</p>';
+
+            try {
+                // 1. Fazer a chamada para a nossa API no backend
+                const response = await fetch('/api/workflow');
+                const workflowData = await response.json();
+
+                console.log('Dados recebidos:', workflowData);
+
+                // Limpa o container
+                nodesContainer.innerHTML = '';
+
+                // 2. Para cada nó recebido, criar um elemento HTML
+                workflowData.nodes.forEach(node => {
+                    const nodeElement = document.createElement('div');
+                    nodeElement.className = 'node';
+
+                    nodeElement.innerHTML = `
+                        ID: <span class="node-id">${node.id}</span><br>
+                        Tipo: <span class="node-type">${node.type}</span>
+                    `;
+
+                    nodesContainer.appendChild(nodeElement);
+                });
+
+            } catch (error) {
+                console.error('Erro ao obter workflow:', error);
+                nodesContainer.innerHTML = '<p style="color: red;">Falha ao carregar o workflow.</p>';
+            }
+        });
+    </script>
+
+</body>
+</html>
